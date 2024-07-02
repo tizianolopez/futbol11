@@ -414,6 +414,10 @@ function confirmPosition(playerName, nationalityName) {
 
 
 function surrender() {
+    clearInterval(timerInterval); // Detener el temporizador cuando llegue a cero
+    document.getElementById('timer-container').style.display = 'none';
+    document.getElementById('playerInput').disabled = true;
+    document.querySelector('button[onclick="submitPlayer()"]').disabled = true;
     console.log("¡Perdiste!"); // Mostrar mensaje de perdedor en la consola
     // Puedes mostrar un mensaje en la interfaz gráfica también si lo deseas
     stop_submitting = true; // Marcar como rendido
@@ -548,6 +552,9 @@ function updateFormation(newPlayerPos = null) {
     if (playersCount >= 23) {
         console.log("¡Ganaste!"); // Mostrar mensaje de ganador en la consola
         // Puedes mostrar un mensaje en la interfaz gráfica también si lo deseas
+        document.getElementById('timer-container').style.display = 'none';
+    document.getElementById('playerInput').disabled = true;
+    document.querySelector('button[onclick="submitPlayer()"]').disabled = true;
         stop_submitting = true; // Marcar como rendido
         clearInterval(timerInterval); // Detener el temporizador si se han completado los 11 jugadores
         fireConfetti();
@@ -619,7 +626,6 @@ function updateTimer() {
     timerCounter.textContent = timer;
 
     if (timer === 0) {
-        clearInterval(timerInterval); // Detener el temporizador cuando llegue a cero
         surrender(); // Rendirse automáticamente cuando se acabe el tiempo
     }
 }
