@@ -176,6 +176,7 @@ function submitPlayer() {
     if (availablePositions.length === 1) {
         const pos = availablePositions[0];
         formation[pos] = playerName;
+        playerCountryMapping[playerName] = player.nationality_name.toLowerCase(); // Agregar la nacionalidad al mapeo
         updateFormation(pos);
         document.getElementById("playerInput").value = "";
         document.getElementById("message").textContent = "";
@@ -188,6 +189,7 @@ function submitPlayer() {
         if (uniqueGenericPositions.length === 1) {
             const pos = availablePositions[0];
             formation[pos] = playerName;
+            playerCountryMapping[playerName] = player.nationality_name.toLowerCase(); // Agregar la nacionalidad al mapeo
             updateFormation(pos);
             document.getElementById("playerInput").value = "";
             document.getElementById("message").textContent = "";
@@ -228,6 +230,7 @@ function confirmPlayerOption(playerName, players) {
     if (selectedOption) {
         const selectedIndex = parseInt(selectedOption.value, 10);
         const selectedPlayer = players[selectedIndex];
+        playerCountryMapping[playerName] = selectedPlayer.nationality_name.toLowerCase(); // Actualizar el mapeo con la nacionalidad del jugador seleccionado
 
         // Continuar con el proceso para agregar el jugador seleccionado a la formación
         const playerPositions = selectedPlayer.player_positions.split(", ").map(pos => pos.toLowerCase());
@@ -330,6 +333,7 @@ function confirmPosition(playerName) {
     } else {
         document.getElementById("message").textContent = "Por favor, selecciona una posición.";
     }
+    playerCountryMapping[playerName] = player.nationality_name.toLowerCase(); // Actualizar el mapeo con la nacionalidad del jugador
 }
 
 
@@ -388,6 +392,9 @@ function generateFormationContainers() {
 
 
 
+// Declarar el mapeo de nacionalidades de los jugadores
+const playerCountryMapping = {};
+
 function updateFormation(newPlayerPos = null) {
     generateFormationContainers(); // Genera contenedores necesarios antes de actualizar
 
@@ -408,12 +415,16 @@ function updateFormation(newPlayerPos = null) {
 
                     const back = document.createElement("div");
                     back.classList.add('side', 'back');
-                    back.style.backgroundImage = `url('flags/${getPlayerCountry(player)}.png')`; // Ajusta la ruta según la estructura de tus archivos de banderas
-                    
+
+                    // Obtener el país actual del jugador
+                    const playerCountry = playerCountryMapping[player];
+                    console.log(playerCountry);
+                    back.style.backgroundImage = `url('flags/${playerCountry}.png')`; // Ajusta la ruta según la estructura de tus archivos de banderas
+
                     const textContainer = document.createElement("div");
                     textContainer.classList.add('text-container');
                     textContainer.textContent = `${player}`;
-                    
+
                     back.appendChild(textContainer);
 
                     card.appendChild(front);
@@ -443,8 +454,12 @@ function updateFormation(newPlayerPos = null) {
 
 
 function getPlayerCountry(playerName) {
-    const player = players.find(p => normalizeString(p.short_name) === playerName || normalizeString(p.long_name) === playerName);
-    return player ? player.nationality_name.toLowerCase() : '';
+    const player = players.find(p =>
+        (normalizeString(p.short_name) === playerName || normalizeString(p.long_name) === playerName) &&
+        normalizeString(p.nationality_name) === currentCountry.toLowerCase()
+    );
+console.log(player);
+    return player ? player.nationality_name.toLowerCase() : "";
 }
 
 function restartGame() {
