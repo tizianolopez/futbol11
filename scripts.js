@@ -254,7 +254,7 @@ function confirmPlayerOption(playerName, players) {
             currentCountry = getRandomCountry(); // Selecciona un nuevo país
             document.getElementById("country").textContent = `País: ${currentCountry}`;
         } else {
-            displayPositionOptions(playerName, availablePositions);
+            displayPositionOptions(playerName, selectedPlayer.nationality_name, availablePositions); // Pasar playerName y nationalityName
         }
     } else {
         document.getElementById("message").textContent = "Por favor, selecciona una opción de jugador.";
@@ -306,14 +306,17 @@ function groupPositions(positions) {
     return result;
 }
 
-
 function confirmPosition(playerName, nationalityName) {
     const selectedPosition = document.querySelector('input[name="position"]:checked');
     if (selectedPosition) {
         const genericPos = selectedPosition.value;
-        const specificPositions = Object.keys(positionMapping).filter(pos => positionMapping[pos] === genericPos);
 
-        // Encontrar la primera posición específica disponible
+        // Filtrar las posiciones específicas que están presentes en la formación actual
+        const specificPositions = Object.keys(positionMapping).filter(pos =>
+            positionMapping[pos] === genericPos && pos in formation
+        );
+
+        // Encontrar la primera posición específica disponible en la formación
         let posToFill = null;
         for (let i = 0; i < specificPositions.length; i++) {
             const pos = specificPositions[i];
