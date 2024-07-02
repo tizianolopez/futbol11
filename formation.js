@@ -506,8 +506,7 @@ function updateFormation(newPlayerPos = null) {
                     const playerCountry = playerCountryMapping[player];
 
                     // Agregar la bandera al fondo de la carta
-                    back.style.backgroundImage = `url('flags/${playerCountry}.png')`; // Ajusta la ruta según la estructura de tus archivos de banderas
-
+                    back.style.backgroundImage = `url('../flags/${playerCountry}.png')`; // Ajusta la ruta según la estructura de tus archivos de banderas
                     const textContainer = document.createElement("div");
                     textContainer.classList.add('text-container');
 
