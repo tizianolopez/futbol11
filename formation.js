@@ -503,8 +503,7 @@ function updateFormation(newPlayerPos = null) {
                     back.classList.add('side', 'back');
 
                     // Obtener el país actual del jugador
-                    const playerCountry = playerCountryMapping[player];
-
+                    const playerCountry = playerCountryMapping[player].charAt(0).toUpperCase() + playerCountryMapping[player].slice(1);
                     // Agregar la bandera al fondo de la carta
                     back.style.backgroundImage = `url('../flags/${playerCountry}.png')`; // Ajusta la ruta según la estructura de tus archivos de banderas
                     const textContainer = document.createElement("div");
