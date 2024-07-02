@@ -6,7 +6,7 @@ body {
 }
 
 #game {
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -17,21 +17,21 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto 3em;
+    margin: 0 auto 0;
 }
 
 .position {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin: 1em 0;
+    margin: 0.5em 0;
 }
 
 .position div {
     margin: 0 10px;
     padding: 5px;
     width: 7em;
-    height: 3em;
+    height: 2em;
     text-align: center;
 }
 
@@ -110,7 +110,7 @@ body {
 }
 
 #defensiveMidfielders .position {
-    margin: 1em 10px 0;
+    margin: 1.5em 10px 0;
 }
 #wideMidfielders .position {
     margin: 2em 10px 0;
@@ -118,6 +118,11 @@ body {
 #fullbacks .position {
     margin: 1.5em 1em 0;
 }
+#defenders{
+    margin: 1.5em 1em 1.5em;
+
+}
+
 #goalkeeper .position {
     margin-bottom: 1em;
 }

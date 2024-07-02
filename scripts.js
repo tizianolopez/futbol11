@@ -196,7 +196,7 @@ function submitPlayer() {
             currentCountry = getRandomCountry(); // Selecciona un nuevo país
             document.getElementById("country").textContent = `País: ${currentCountry}`;
         } else if (availablePositions.length > 1) {
-            displayPositionOptions(playerName, availablePositions);
+            displayPositionOptions(playerName, player.nationality_name, availablePositions); // Pasar playerName y nationalityName
         } else {
             document.getElementById("message").textContent = "Todas las posiciones del jugador ya están ocupadas.";
         }
@@ -214,7 +214,7 @@ function displayPlayerOptions(playerName, players) {
         radio.name = "playerOption";
         radio.value = index.toString(); // Usar el índice como valor para identificar la selección
         label.appendChild(radio);
-        label.appendChild(document.createTextNode(`${player.long_name} (${player.nationality_name})`));
+        label.appendChild(document.createTextNode(`${player.long_name}`));
         messageDiv.appendChild(label);
         messageDiv.appendChild(document.createElement("br"));
     });
@@ -266,7 +266,7 @@ function normalizeString(str) {
     return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-function displayPositionOptions(playerName, positions) {
+function displayPositionOptions(playerName, nationalityName, positions) {
     const messageDiv = document.getElementById("message");
     messageDiv.innerHTML = `Elige la posición para ${playerName}:<br>`;
 
@@ -286,9 +286,10 @@ function displayPositionOptions(playerName, positions) {
 
     const submitButton = document.createElement("button");
     submitButton.textContent = "Confirmar";
-    submitButton.onclick = () => confirmPosition(playerName);
+    submitButton.onclick = () => confirmPosition(playerName, nationalityName); // Pasar playerName y nationalityName
     messageDiv.appendChild(submitButton);
 }
+
 
 function groupPositions(positions) {
     const grouped = {};
@@ -304,12 +305,14 @@ function groupPositions(positions) {
 
     return result;
 }
-function confirmPosition(playerName) {
+
+
+function confirmPosition(playerName, nationalityName) {
     const selectedPosition = document.querySelector('input[name="position"]:checked');
     if (selectedPosition) {
         const genericPos = selectedPosition.value;
         const specificPositions = Object.keys(positionMapping).filter(pos => positionMapping[pos] === genericPos);
-        
+
         // Encontrar la primera posición específica disponible
         let posToFill = null;
         for (let i = 0; i < specificPositions.length; i++) {
@@ -322,6 +325,7 @@ function confirmPosition(playerName) {
 
         if (posToFill) {
             formation[posToFill] = playerName;
+            playerCountryMapping[playerName] = nationalityName.toLowerCase(); // Actualizar el mapeo con la nacionalidad del jugador
             updateFormation(posToFill);
             document.getElementById("playerInput").value = "";
             document.getElementById("message").textContent = "";
@@ -333,8 +337,8 @@ function confirmPosition(playerName) {
     } else {
         document.getElementById("message").textContent = "Por favor, selecciona una posición.";
     }
-    playerCountryMapping[playerName] = player.nationality_name.toLowerCase(); // Actualizar el mapeo con la nacionalidad del jugador
 }
+
 
 
 
